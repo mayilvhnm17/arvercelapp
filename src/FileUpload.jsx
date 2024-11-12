@@ -33,7 +33,7 @@ const FileUpload = () => {
 		setUploadStatus("");
 		try {
 			const response = await axios.post(
-				"http://localhost:3100/upload-model",
+				"https://arvercelapp.vercel.app//upload-model",
 				formData,
 				{
 					headers: { "Content-Type": "multipart/form-data" },
