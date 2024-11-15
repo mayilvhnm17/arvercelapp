@@ -24,7 +24,7 @@ module.exports = async (req, res) => {
 	}
 
 	try {
-		const fileExtension = fileType.split("/")[1]; // Derive extension from MIME type
+		const fileExtension = fileType; // Derive extension from MIME type
 		const fileName = `${uuid()}.${fileExtension}`; // Unique filename
 		const s3Params = {
 			Bucket: process.env.AWS_BUCKET_NAME,
