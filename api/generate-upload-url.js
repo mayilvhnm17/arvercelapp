@@ -33,10 +33,6 @@ module.exports = async (req, res) => {
 			ContentType: fileType,
 			ACL: "public-read",
 			Metadata: { modelName: name },
-			Conditions: [
-				["content-length-range", 0, 504857600], // Optional: limit file size (here: 10MB)
-				["starts-with", "$Content-Type", ""], // Allow any content type
-			],
 		};
 
 		// Generate a pre-signed URL
@@ -47,6 +43,6 @@ module.exports = async (req, res) => {
 		console.error("Error generating pre-signed URL:", error);
 		return res
 			.status(500)
-			.json({ error: "Could not generate pre-signed URL." });
+			.json({ error: "Could not generate pre-signed URL."+error });
 	}
 };
