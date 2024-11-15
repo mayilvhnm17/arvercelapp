@@ -32,12 +32,21 @@ const FileUpload = () => {
 	}
 
 	async function uploadFileToS3(uploadUrl, file) {
+		try{
 		const response = await fetch(uploadUrl, {
 			method: "PUT",
 			headers: { "Content-Type": file.type },
 			body: file,
 		});
-		return response.ok;
+		 if (!response.ok) {
+            throw new Error(`Upload failed: ${response.status}`);
+        }
+        
+        return response;
+    } catch (error) {
+        console.error('Upload error:', error);
+        throw error;
+    }
 	}
 
 	async function uploadModel(file, modelName) {

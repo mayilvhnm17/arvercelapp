@@ -33,6 +33,10 @@ module.exports = async (req, res) => {
 			ContentType: fileType,
 			ACL: "public-read",
 			Metadata: { modelName: name },
+			Conditions: [
+				["content-length-range", 0, 104857600], // Optional: limit file size (here: 10MB)
+				["starts-with", "$Content-Type", ""], // Allow any content type
+			],
 		};
 
 		// Generate a pre-signed URL
