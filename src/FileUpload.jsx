@@ -35,7 +35,7 @@ const FileUpload = () => {
 		try{
 		const response = await fetch(uploadUrl, {
 			method: "PUT",
-			headers: { "Content-Type": file.type },
+			headers: { "Content-Type": file.mimetype },
 			body: file,
 		});
 		 if (!response.ok) {
