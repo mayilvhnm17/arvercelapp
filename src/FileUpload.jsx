@@ -32,10 +32,11 @@ const FileUpload = () => {
 	}
 
 	async function uploadFileToS3(uploadUrl, file) {
+		const fileType = file.name.split(".").pop();
 		try{
 		const response = await fetch(uploadUrl, {
 			method: "PUT",
-			headers: { "Content-Type": file.mimetype },
+			headers: { "Content-Type": fileType },
 			body: file,
 		});
 		 if (!response.ok) {
