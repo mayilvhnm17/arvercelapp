@@ -17,6 +17,49 @@ const FileUpload = () => {
 		setName(e.target.value);
 	};
 
+	async function getPresignedUrl(name, file) {
+		const fileType = file.type;
+
+		// Request pre-signed URL
+		const response = await fetch("/api/generate-upload-url", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ name, fileType }),
+		});
+		const { uploadUrl, fileName } = await response.json();
+
+		return { uploadUrl, fileName };
+	}
+
+	async function uploadFileToS3(uploadUrl, file) {
+		const response = await fetch(uploadUrl, {
+			method: "PUT",
+			headers: { "Content-Type": file.type },
+			body: file,
+		});
+		return response.ok;
+	}
+
+	async function uploadModel(file, modelName) {
+		const { uploadUrl, fileName } = await getPresignedUrl(modelName, file);
+
+		const success = await uploadFileToS3(uploadUrl, file);
+		if (success) {
+			console.log("File uploaded successfully:", fileName);
+			//setUploadStatus("Upload successful!");
+			return `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/uploads/${fileName}`;
+			
+		} else {
+			setUploadStatus("Upload failed. Please try again.");
+			console.error("File upload failed.");
+			return null;
+		}
+		
+	}
+
+
+
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
@@ -32,13 +75,14 @@ const FileUpload = () => {
 		setIsLoading(true); // Start loading
 		setUploadStatus("");
 		try {
-			const response = await axios.post(
-				"https://arvercelapp.vercel.app/api/upload-model",
-				formData,
-				{
-					headers: { "Content-Type": "multipart/form-data" },
-				}
-			);
+			// const response = await axios.post(
+			// 	"https://arvercelapp.vercel.app/api/upload-model",
+			// 	formData,
+			// 	{
+			// 		headers: { "Content-Type": "multipart/form-data" },
+			// 	}
+			// );
+			uploadModel(file,name);
 			setUploadStatus("Upload successful!");
 		} catch (error) {
 			console.error("Error uploading file:", error);
