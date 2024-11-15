@@ -105,7 +105,7 @@ const FileUpload = () => {
 	return (
 		<div style={{ height:'100vh',backgroundColor: "rgb(61, 176, 124)" }}>
 			<div className="upload-container">
-				<h2 className="header">Upload FBX File</h2>
+				<h2 className="header">Upload GLTF File</h2>
 				<form onSubmit={handleSubmit} className="upload-form">
 					<div className="input-group">
 						<label htmlFor="name">Name:</label>
@@ -123,7 +123,7 @@ const FileUpload = () => {
 						<input
 							type="file"
 							id="file"
-							accept=".fbx"
+							accept=".gltf"
 							onChange={handleFileChange}
 							required
 							className="input-field"
