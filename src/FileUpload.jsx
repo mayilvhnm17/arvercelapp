@@ -18,7 +18,7 @@ const FileUpload = () => {
 	};
 
 	async function getPresignedUrl(name, file) {
-		const fileType = file.type;
+		const fileType = file.name.split(".").pop();
 
 		// Request pre-signed URL
 		const response = await fetch("/api/generate-upload-url", {
