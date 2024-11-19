@@ -10,6 +10,15 @@ AWS.config.update({
 const s3 = new AWS.S3();
 
 module.exports = async (req, res) => {
+	if (req.method === "OPTIONS") {
+		res.setHeader("Access-Control-Allow-Origin", "*"); // Allow all origins, or specify a domain
+		res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS"); // Allowed methods
+		res.setHeader(
+			"Access-Control-Allow-Headers",
+			"Content-Type, Authorization"
+		); // Allowed headers
+		return res.status(200).end();
+	}
 	if (req.method === "GET") {
 		return getModels(req, res);
 	} else {

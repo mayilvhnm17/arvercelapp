@@ -1,6 +1,7 @@
 const AWS = require("aws-sdk");
 const uuid = require("uuid").v4;
 
+
 // AWS SDK configuration
 AWS.config.update({
 	accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -11,6 +12,15 @@ AWS.config.update({
 const s3 = new AWS.S3();
 
 module.exports = async (req, res) => {
+	if (req.method === "OPTIONS") {
+		res.setHeader("Access-Control-Allow-Origin", "*"); // Allow all origins, or specify a domain
+		res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS"); // Allowed methods
+		res.setHeader(
+			"Access-Control-Allow-Headers",
+			"Content-Type, Authorization"
+		); // Allowed headers
+		return res.status(200).end();
+	}
 	if (req.method !== "POST") {
 		return res.status(405).json({ error: "Method not allowed" });
 	}

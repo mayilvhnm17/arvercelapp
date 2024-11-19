@@ -15,6 +15,15 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage }).single("fbxFile");
 
 module.exports = (req, res) => {
+	if (req.method === "OPTIONS") {
+		res.setHeader("Access-Control-Allow-Origin", "*"); // Allow all origins, or specify a domain
+		res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS"); // Allowed methods
+		res.setHeader(
+			"Access-Control-Allow-Headers",
+			"Content-Type, Authorization"
+		); // Allowed headers
+		return res.status(200).end();
+	}
 	upload(req, res, async (err) => {
 		if (err) {
 			return res.status(500).json({ error: "Error uploading file" });
