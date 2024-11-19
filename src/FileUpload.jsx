@@ -44,7 +44,7 @@ const FileUpload = () => {
 		const response = await fetch("/api/trigger-github-action", {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({ modelName, fileUrl }),
+			body: JSON.stringify({ modelName, fileName:fileUrl }),
 		});
 
 		if (!response.ok) {
