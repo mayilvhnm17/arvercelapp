@@ -54,9 +54,12 @@ const FileUpload = () => {
 	}
 
 	async function uploadModel(file, modelName) {
+		   const bucketName = process.env.AWS_BUCKET_NAME;
+				const region = process.env.AWS_REGION;
+				console.log("Bucket Name:", bucketName);
 		const { uploadUrl, fileName } = await getPresignedUrl(modelName, file);
 		await uploadFileToS3(uploadUrl, file);
-		return `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/uploads/${fileName}`;
+		return `https://${bucketName}.s3.${region}.amazonaws.com/uploads/${fileName}`;
 	}
 
 	const handleSubmit = async (e) => {
