@@ -15,9 +15,9 @@ module.exports = async (req, res) => {
 		return res.status(405).json({ error: "Method not allowed" });
 	}
 
-	const { modelName, fileUrl } = req.body;
+	const { modelName, fileName } = req.body;
 
-	if (!modelName || !fileUrl) {
+	if (!modelName || !fileName) {
 		return res
 			.status(400)
 			.json({ error: "Model name and file URL are required." });
@@ -36,7 +36,7 @@ module.exports = async (req, res) => {
 					ref: "main", // or the branch you want to trigger
 					inputs: {
 						modelName,
-						fileUrl,
+						fileUrl:`https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileName}`,
 					},
 				}),
 			}

@@ -54,12 +54,9 @@ const FileUpload = () => {
 	}
 
 	async function uploadModel(file, modelName) {
-		   const bucketName = process.env.AWS_BUCKET_NAME;
-				const region = process.env.AWS_REGION;
-				console.log("Bucket Name:", bucketName);
 		const { uploadUrl, fileName } = await getPresignedUrl(modelName, file);
 		await uploadFileToS3(uploadUrl, file);
-		return `https://${bucketName}.s3.${region}.amazonaws.com/uploads/${fileName}`;
+		return fileName;
 	}
 
 	const handleSubmit = async (e) => {
@@ -72,11 +69,11 @@ const FileUpload = () => {
 		setIsLoading(true);
 		setUploadStatus("");
 		try {
-			const fileUrl = await uploadModel(file, name);
+			const fileName = await uploadModel(file, name);
 			setUploadStatus(
 				"File uploaded successfully. Triggering GitHub Action..."
 			);
-			await triggerGitHubAction(name, fileUrl);
+			await triggerGitHubAction(name, fileName);
 			setUploadStatus("Upload and Action triggered successfully!");
 		} catch (error) {
 			console.error("Error:", error);
