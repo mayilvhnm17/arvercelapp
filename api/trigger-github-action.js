@@ -43,9 +43,6 @@ module.exports = async (req, res) => {
 			}
 		);
 
-         const responseBody = await response.json();
-					console.log(responseBody);
-
 
 		if (!response.ok) {
 			throw new Error("Failed to trigger GitHub Action");
