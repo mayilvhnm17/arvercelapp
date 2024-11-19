@@ -24,6 +24,7 @@ module.exports = async (req, res) => {
 	}
 
 	try {
+        const fileUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileName}`;
 		const response = await fetch(
 			`https://api.github.com/repos/mayilvhnm17/ARObjectPlacement/actions/workflows/unity-addressables-build.yml/dispatches`,
 			{
@@ -36,7 +37,7 @@ module.exports = async (req, res) => {
 					ref: "main", // or the branch you want to trigger
 					inputs: {
 						modelName,
-						fileUrl:`https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileName}`,
+						fileUrl,
 					},
 				}),
 			}
