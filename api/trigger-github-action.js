@@ -23,7 +23,7 @@ module.exports = async (req, res) => {
 	}
 
 	try {
-        const fileUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileName}`;
+        const fileUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/uploads/${fileName}`;
         console.log(fileUrl);
 		const response = await fetch(
 			`https://api.github.com/repos/mayilvhnm17/ARObjectPlacement/actions/workflows/unity-addressables-build.yml/dispatches`,
