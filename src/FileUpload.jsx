@@ -1,7 +1,5 @@
-'use client'
 import React, { useState } from "react";
 import "./FileUpload.css";
-import fbx2gltf from 'fbx2gltf';
 
 const FileUpload = () => {
 	const [file, setFile] = useState(null);
@@ -18,8 +16,7 @@ const FileUpload = () => {
 	};
 
 	async function getPresignedUrl(name, file) {
-		//const fileType = file.name.split(".").pop();
-		const fileType = "gltf";
+		const fileType = file.name.split(".").pop();
 		const response = await fetch("/api/generate-upload-url", {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
@@ -58,34 +55,9 @@ const FileUpload = () => {
 
 	async function uploadModel(file, modelName) {
 		const { uploadUrl, fileName } = await getPresignedUrl(modelName, file);
-		  const formData = new FormData();
-			formData.append("file", file);
-
-			const response = await fetch("/api/upload-fbx", {
-				method: "POST",
-				body: formData,
-			});
-
-			if (!response.ok) {
-				throw new Error("Error converting FBX to GLTF");
-			}
-
-			const { convertedFile } = await response.json();
-			await uploadFileToS3(uploadUrl, convertedFile);
+		await uploadFileToS3(uploadUrl, file);
 		return fileName;
 	}
-
-	// async function convertFBXFirst(file) {
-	// 	 const fbxFilePath = `/tmp/${file.originalname}`;
-	// 		fs.writeFileSync(fbxFilePath, file.buffer);
-	// 		const gltfFilePath = `/tmp/${file.originalname}.gltf`;
-	// 		try {
-	// 			var gltfFile = await fbx2gltf(fbxFilePath, gltfFilePath);
-	// 		} catch (conversionError) {
-	// 			console.error("FBX to GLTF conversion failed:", conversionError);
-	// 		}
-	// 		return gltfFile;
-	// }
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -99,10 +71,10 @@ const FileUpload = () => {
 		try {
 			const fileName = await uploadModel(file, name);
 			setUploadStatus(
-				"File uploaded successfully. Triggering GitHub Action..."
+				"File uploaded successfully."
 			);
-			await triggerGitHubAction(name, fileName);
-			setUploadStatus("Upload and Action triggered successfully!");
+			//await triggerGitHubAction(name, fileName);
+			setUploadStatus("Uploaded successfully!");
 		} catch (error) {
 			console.error("Error:", error);
 			setUploadStatus("An error occurred. Please try again.");
