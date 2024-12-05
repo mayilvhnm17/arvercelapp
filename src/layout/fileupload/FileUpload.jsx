@@ -32,6 +32,7 @@ const FileUpload = () => {
 			method: "PUT",
 			headers: { "Content-Type": fileType },
 			body: file,
+			mode: "cors",
 		});
 
 		if (!response.ok) {
@@ -40,23 +41,10 @@ const FileUpload = () => {
 		return response;
 	}
 
-	async function triggerGitHubAction(modelName, fileUrl) {
-		const response = await fetch("/api/trigger-github-action", {
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({ modelName, fileName:fileUrl }),
-		});
-
-		if (!response.ok) {
-			throw new Error("Failed to trigger GitHub Action");
-		}
-		return response.json();
-	}
-
 	async function uploadModel(file, modelName) {
 		const { uploadUrl, fileName } = await getPresignedUrl(modelName, file);
 		await uploadFileToS3(uploadUrl, file);
-		return fileName;
+		return uploadUrl;
 	}
 
 	const handleSubmit = async (e) => {
@@ -69,7 +57,25 @@ const FileUpload = () => {
 		setIsLoading(true);
 		setUploadStatus("");
 		try {
-			const fileName = await uploadModel(file, name);
+			const uploadUrl = await uploadModel(file, name);
+
+			const response = await fetch("/api/save-model", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+				},
+				body: JSON.stringify({
+					name,
+					fileUrl: uploadUrl,
+				}),
+			});
+
+				if (!response.ok) {
+					throw new Error("Failed to save model metadata");
+				}
+
+				const data = await response.json();
 			setUploadStatus(
 				"File uploaded successfully."
 			);
