@@ -24,7 +24,7 @@ export default async function handler(req, res) {
 		const newModel = new Model({
 			name,
 			fileUrl,
-			userId: user.id, // Associate the model with the user
+			userId: user._id, // Associate the model with the user
 		});
 
 		await newModel.save();
