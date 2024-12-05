@@ -32,7 +32,6 @@ const FileUpload = () => {
 			method: "PUT",
 			headers: { "Content-Type": fileType },
 			body: file,
-			mode: "cors",
 		});
 
 		if (!response.ok) {
@@ -44,7 +43,7 @@ const FileUpload = () => {
 	async function uploadModel(file, modelName) {
 		const { uploadUrl, fileName } = await getPresignedUrl(modelName, file);
 		await uploadFileToS3(uploadUrl, file);
-		return uploadUrl;
+		return uploadUrl.split(/[?#]/)[0];
 	}
 
 	const handleSubmit = async (e) => {
@@ -59,7 +58,7 @@ const FileUpload = () => {
 		try {
 			const uploadUrl = await uploadModel(file, name);
 
-			const response = await fetch("/api/save-model", {
+			const response = await fetch("/api/models/save-model", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
