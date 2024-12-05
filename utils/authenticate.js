@@ -3,8 +3,8 @@ import jwt from "jsonwebtoken";
 /**
  * Middleware to verify JWT and extract user data.
  */
-export const authenticateUser = (req) => {
-	const token = req.headers.authorization?.split(" ")[1];
+export const authenticateUser = (token) => {
+	//const token = req.headers.authorization?.split(" ")[1];
 
 	if (!token) {
 		throw new Error("No token provided");
