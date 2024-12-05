@@ -14,6 +14,7 @@ export default async function handler(req, res) {
 	try {
 		// Verify the user's access token
 		const user = authenticateUser(token);
+        console.log(JSON.stringify(user));
 		if (!user) {
 			return res.status(401).json({ error: "Unauthorized" });
 		}
