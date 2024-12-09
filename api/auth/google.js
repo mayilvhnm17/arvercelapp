@@ -11,6 +11,10 @@ export default async function handler(req, res) {
 	}
 
 	const { tokenId } = req.body;
+	const validClientIds = [
+		process.env.WEB_CLIENT_ID, // Web Client ID
+		process.env.MOBILE_CLIENT_ID, // Mobile Client ID
+	];
 
 	try {
 		await connectToDatabase();
@@ -18,7 +22,7 @@ export default async function handler(req, res) {
 		// Verify Google token
 		const ticket = await client.verifyIdToken({
 			idToken: tokenId,
-			audience: process.env.GOOGLE_CLIENT_ID,
+			audience: validClientIds,
 		});
 
 		const { sub: googleId, email, name } = ticket.getPayload();
