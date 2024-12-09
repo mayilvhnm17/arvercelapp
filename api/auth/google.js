@@ -12,7 +12,7 @@ export default async function handler(req, res) {
 
 	const { tokenId } = req.body;
 	const validClientIds = [
-		process.env.WEB_CLIENT_ID, // Web Client ID
+		process.env.GOOGLE_CLIENT_ID, // Web Client ID
 		process.env.MOBILE_CLIENT_ID, // Mobile Client ID
 	];
 

@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const clientId =
-	"729706315006-ddst4b64ffgao0fn570bmlvh25239ogn.apps.googleusercontent.com";
+	"557501106123-i66co4fm5k4c34a12cv9bqj0caiq0ksn.apps.googleusercontent.com";
 const GoogleLoginLayout = () => {
 	//const [accessToken, setAccessToken] = useState("");
     	 const dispatch = useDispatch();
