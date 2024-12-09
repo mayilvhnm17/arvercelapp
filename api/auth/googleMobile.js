@@ -1,4 +1,3 @@
-import axios from "axios";
 import { connectToDatabase } from "../../utils/database";
 import User from "../../models/users";
 import { generateToken } from "../../utils/authenticate";
@@ -19,14 +18,26 @@ export default async function handler(req, res) {
 		console.log(req.body);
 
 		// Verify Access Token using Google's Tokeninfo API
-		const userInfoResponse = await axios.get(
+		const userInfoResponse = await fetch(
 			"https://www.googleapis.com/oauth2/v1/userinfo",
 			{
-				headers: { Authorization: `Bearer ${accessToken}` },
+				method: "GET",
+				headers: {
+					Authorization: `Bearer ${accessToken}`,
+				},
 			}
 		);
 
-		const { id: googleId, email, name } = userInfoResponse.data;
+		if (!userInfoResponse.ok) {
+			throw new Error(
+				`Failed to fetch user info: ${userInfoResponse.statusText}`
+			);
+		}
+
+		const userInfoData = await userInfoResponse.json();
+		const { id: googleId, email, name } = userInfoData;
+
+		// Now you can use googleId, email, and name in your logic.
 
 		// Find or create user
 		let user = await User.findOne({ googleId });
