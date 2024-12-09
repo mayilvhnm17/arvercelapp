@@ -14,7 +14,7 @@ export default async function handler(req, res) {
 
 	try {
 		await connectToDatabase();
-		console.log(tokenId);
+		console.log(req.body);
 		// Verify Google token
 		const ticket = await client.verifyIdToken({
 			idToken: tokenId,
